@@ -2,7 +2,7 @@
 name: drug-procurement
 slug: drug-procurement
 displayName: 药品集采·投标·执行·应对
-version: 2.0.0
+version: 2.0.1
 author: zhouwei <WeChat: Shanyue0920>
 summary: 药品集中采购(VBP/集采)结构化分析。8维度覆盖集采体系全景与4层路由(国采/全国联盟/跨省联盟/省级)/集采纳入预判(纳入预判模型)/集采投标策略(投标决策树)/集采执行与供应保障/集采后竞争格局与应对/集采联动接口/集采政策动态追踪/集采接续与续约。6条横切规则贯穿(每次必联网+来源标注URL日期+纵向对比每次必做+政策5维解读+横向对比每次必做+核心数据≥2源交叉验证+地域差异矩阵+数据校准)。**焊死规则：每次调用必须先联网获取最新信息，每条数据必须标注官网URL+发布日期+访问日期，核心数据必须≥2源交叉验证且至少1源为P0官方一手。** 每次讨论集采必做纵向对比(本次vs上次)和横向对比(跨层级/跨联盟/跨省)，必出对药企指导意见和药品集采生命周期指导意见。按品种类型全覆盖(化药/中成药/中药饮片/生物药)差异化路径。本 skill 内置知识库(临床档案+校准规则+循证三件套)。高度政策驱动，禁止凭记忆/用旧数据。
 license: MIT
@@ -18,7 +18,7 @@ description: >
   集采接续与续约(国采接续/联盟省级续约/接续规则差异)。
   按品种类型全覆盖：化药(过评/未过评)/中成药(湖北联盟·无一致性评价·质量标准不统一)/中药饮片(2025新开展)/生物药(胰岛素专项·干扰素联盟·生物类似药)。
   5条横切规则贯穿：①政策实时溯源(采购文件原文+文号+截至日期) ②规则版本对比(第1-11批演进对比表强制输出) ③政策5维解读 ④地域差异矩阵(各联盟/各省) ⑤数据校准(🔍/💭)。
-  本 skill 内置共享底座，不重复临床基础与校准规则。
+  本 skill 内置基础模块（foundation.md），不重复临床基础与校准规则。
   按使用者水平切换新人(详细+输入清单)或资深(精简+直给初稿)深度档位。
   严格区分集采独占职能(深做)、协同接口(医保/进院/定价/挂网等,只给接口清单)、非集采边界(纯医保谈判/纯注册/纯市场推广,外置)。
   触发语示例：「这个产品会不会被集采」「第几批可能纳入」「集采怎么投」「报量怎么报」
@@ -30,8 +30,8 @@ allowed-tools: WebSearch, WebFetch, Read, Write
 ---
 
 
-> **🔧 自包含声明**：本 skill 已**完全自包含**，可独立运行，无需安装任何其他 skill 或外部共享底座。
-> 内置共享知识存于本 skill 的 `references/`：临床档案框架与校准规则见 `references/foundation.md`；循证三件套见 `references/evidence-levels.md`、`references/drug-classes.md`、`references/market-methodology.md`；专利FTO框架见 `references/foundation.md` §三。
+> **🔧 自包含声明**：本 skill 已**完全自包含**，可独立运行，无需安装任何其他 skill 或外部依赖。
+> 内置共享知识存于本 skill 的 `references/`：临床档案框架与校准规则见 `references/foundation.md`；循证三件套见 `references/evidence-levels.md`、`references/drug-classes.md`、`references/market-methodology.md`；专利FTO框架见 `references/foundation.md` §3。
 
 # 药品集采 Skill
 > 作者 / 出品：zhouwei <WeChat：Shanyue0920>
@@ -52,7 +52,7 @@ allowed-tools: WebSearch, WebFetch, Read, Write
 
 **品种类型全覆盖**：化药（过评/未过评）、中成药、中药饮片、生物药——每种的集采主战场、纳入条件、投标策略、规则差异、特殊性都不同。本 Skill 每个维度都按品种类型给差异化内容，不给"一套规则打天下"的笼统结论。
 
-**内置共享知识**：本 Skill 内置共享底座（临床档案/校准规则/循证三件套/专利FTO）——临床档案(机制/靶点/PK/安全性/循证三件套)、数据校准规则(🔍/💭)、references 知识库(evidence-levels.md / drug-classes.md / market-methodology.md)。不重复这些基础内容，需要时直接 Read 调用。
+**内置共享知识**：本 Skill 内置基础模块（foundation.md）（临床档案/校准规则/循证三件套/专利FTO）——临床档案(机制/靶点/PK/安全性/循证三件套)、数据校准规则(🔍/💭)、references 知识库(evidence-levels.md / drug-classes.md / market-methodology.md)。不重复这些基础内容，需要时直接 Read 调用。
 
 ## 2. 集采全生命周期路径（核心机制 · 入口判断）
 
@@ -265,9 +265,9 @@ Step 0.6（强制·不可跳过）：核心数据交叉验证
 | 执行节奏差异 | P4 | 各省执行周期/报量绑定/落地节奏不同 |
 | 接续规则差异 | P8 | 国采接续vs联盟续约vs省级续约 |
 
-### 3.6 第六条：数据校准与交叉验证（强制 · 复用 本 skill references/foundation.md §3 并强化）
+### 3.6 第六条：数据校准与交叉验证（强制 · 复用 本 skill references/foundation.md §2 并强化）
 
-本 Skill 输出的每条关键数据都必须可溯源、可校验。严格执行以下 5 条（在 本 skill references/foundation.md §3 基础上强化）：
+本 Skill 输出的每条关键数据都必须可溯源、可校验。严格执行以下 5 条（在 本 skill references/foundation.md §2 基础上强化）：
 
 - **来源分级标注**：每条关键数据标可信度——🔍 已查证（联采办/医保局/卫健委/招采平台/权威数据如IQVIA·米内·药智）、💭 推测或不确定。**禁止把 💭 当 🔍 呈现。** 🔍 的数据必须附带具体来源 URL 和访问日期（§3.1 格式）。
 
